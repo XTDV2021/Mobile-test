@@ -17,6 +17,7 @@ const ProductListingScreen = () => {
 			categories: '8424 Padberg Flats',
 			deliveryTime: '$ 316.00/Night - FreeCancellation',
 			distance: 'Bad(12)',
+      status: 'InActive',
 			image: require('../assets/4.jpg'),
 			id: 1,
 		},
@@ -25,6 +26,7 @@ const ProductListingScreen = () => {
 			categories: '43299 Murazik Extension',
 			deliveryTime: '$ 245.00/Night - FreeCancellation',
 			distance: 'Average(11)',
+      status: 'Active',
 			image: require('../assets/5.jpg'),
 			id: 2,
 		},
@@ -33,6 +35,7 @@ const ProductListingScreen = () => {
 			categories: '73311 Freida Point',
 			deliveryTime: '$ 662.00/Night - FreeCancellation',
 			distance: 'Average(8)',
+      status: 'InActive',
 			image: require('../assets/6.jpg'),
 			id: 3,
 		},
@@ -41,6 +44,7 @@ const ProductListingScreen = () => {
 			categories: '303 Volkman Lakes',
 			deliveryTime: '$ 170.00/Night - FreeCancellation',
 			distance: 'Good(5)',
+      status: 'Active',
 			image: require('../assets/7.jpg'),
 			id: 4,
 		},
@@ -49,6 +53,7 @@ const ProductListingScreen = () => {
 			categories: '52623 Donnie Roads',
 			deliveryTime: '$ 223.00/Night - FreeCancellation',
 			distance: 'Good(14)',
+      status: 'InActive',
 			image: require('../assets/8.jpg'),
 			id: 5,
 		},
@@ -62,7 +67,6 @@ const ProductListingScreen = () => {
   return (
     <View style={styles.container}>
       <SearchHeader />
-
       <ScrollView>
         <View style={styles.contentContainer}>
         <FlatList
@@ -82,7 +86,6 @@ const ProductListingScreen = () => {
           )}
         </View>
       </ScrollView>
-    
     </View>
   );
 };

@@ -21,7 +21,7 @@ const Footer = (props) => {
       {/* Logo */}
       <View style={styles.logoContainer}>
         {/* <Image source={require('./path/to/logo.png')} /> */}
-        <Text style={styles.logoText}>TripFinder</Text>
+        <Text style={styles.logoText}>The Oasis Luxury</Text>
       </View>
 
       {/* Navigation Links */}
@@ -34,11 +34,6 @@ const Footer = (props) => {
         <TouchableOpacity onPress={() => handlePress('Listing')}>
           <Text style={[styles.navigationLink, pressedText === 'Listing' && { color: '#26AAA0' }]}>
             Listing
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handlePress('Pricing')}>
-          <Text style={[styles.navigationLink, pressedText === 'Pricing' && { color: '#26AAA0' }]}>
-            Pricing
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handlePress('Privacy')}>

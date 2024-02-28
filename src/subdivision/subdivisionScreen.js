@@ -27,7 +27,7 @@ const SubdivisionScreen = () => {
         scrollToY = 700; // Vị trí cần cuộn đến cho AmenitiesScreen
         break;
       case 'Location':
-        scrollToY = 950; // Vị trí cần cuộn đến cho Address
+        scrollToY = 1000; // Vị trí cần cuộn đến cho Address
         break;
       default:
         scrollToY = 0;

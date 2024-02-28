@@ -8,67 +8,67 @@ import {
   TouchableOpacity,
   StyleSheet,
   Button,
-  Alert,
+  Image,
 } from "react-native";
+import { baseUrl } from "./utils/IP";
 
-// function LoginScreen(props) {
-//   const [user_name, setUser_name] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const onChangeUser_name = (text) => setUser_name(text);
-//   const onChangePassword = (text) => setPassword(text);
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  //   const request = axios.create({
-  //     headers: { Authorization: `Bearer ${accessToken}` },
-  //   });
+    // const request = axios.create({
+    //   headers: { Authorization: `Bearer ${accessToken}` },
+    // });
   const handleSubmit = async () => {
     try {
       console.log("info", username + password);
       const response = await axios.post(
-        "https://admin.reso.vn/api/v1/auth/login",
+        `${baseUrl}/users/login`,
         {
-          username: username,
+          user_name: username,
           password: password,
         }
       );
-      console.log("response data", response.data.accessToken);
-      await AsyncStorage.setItem("accessToken", response.data.accessToken);
-      //   localStorage.setItem("accessToken", accessToken);
-      //   axios.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
-      //   navigation.navigate("Home");
-      handleGetStore();
+      console.log("response data", response.data);
+      // .accessToken
+      // await AsyncStorage.setItem("accessToken", response.data.accessToken);
+        // localStorage.setItem("accessToken", accessToken);
+        // axios.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
+        navigation.navigate("HomeDrawer");
+      // handleGetStore();
     } catch (error) {
       console.log("response data", error);
     } finally {
       console.log("response data");
     }
   };
-  const handleGetStore = async () => {
-    try {
-      const accessToken = await AsyncStorage.getItem("accessToken");
-      console.log("token", accessToken);
-      const instance = axios.create({
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+  // const handleGetStore = async () => {
+  //   try {
+  //     const accessToken = await AsyncStorage.getItem("accessToken");
+  //     console.log("token", accessToken);
+  //     const instance = axios.create({
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     });
 
-      const response = await instance.get(
-        "https://admin.reso.vn/api/v1/brands/b21e84cc-5bff-408e-b38e-026aa996d251/stores?page=1&size=10"
-      );
-      console.log("response data", response.data);
-    } catch (error) {
-      console.log("response error", error);
-    } finally {
-      console.log("response data");
-    }
-  };
+  //     const response = await instance.get(
+  //       "http://localhost:5000/api/v1/subdivisions/"
+  //     );
+  //     console.log("response data", response.data);
+  //   } catch (error) {
+  //     console.log("response error", error);
+  //   } finally {
+  //     console.log("response data");
+  //   }
+  // };
   return (
     <View style={styles.container}>
+      <Image
+        source={require("../assets/the_oasis_luxury.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Welcome Back</Text>
       <Text style={styles.label}>Please log into your account</Text>
 
@@ -86,14 +86,9 @@ const LoginScreen = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
       />
-      {/* <View style={styles.checkboxContainer}>
-                <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
-                    <Text style={styles.checkbox}>{rememberMe ? '☑' : '☐'} Remember Me</Text>
-                </TouchableOpacity>
-            </View> */}
 
       <View style={styles.checkboxContainer}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => { }}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
@@ -112,10 +107,10 @@ const LoginScreen = ({ navigation }) => {
         }}
       >
         <View style={{ flex: 1, marginRight: 5 }}>
-          <Button title="Facebook" color="#3b5998" onPress={() => {}} />
+          <Button title="Facebook" color="#3b5998" onPress={() => { }} />
         </View>
         <View style={{ flex: 1, marginLeft: 5 }}>
-          <Button title="Github" color="#333" onPress={() => {}} />
+          <Button title="Github" color="#333" onPress={() => { }} />
         </View>
       </View>
       <View
@@ -126,14 +121,16 @@ const LoginScreen = ({ navigation }) => {
         }}
       >
         <View style={{ flex: 1, marginRight: 5 }}>
-          <Button title="Firebase" color="#FFA611" onPress={() => {}} />
+          <Button title="Firebase" color="#FFA611" onPress={() => { }} />
         </View>
         <View style={{ flex: 1, marginLeft: 5 }}>
-          <Button title="Google+" color="#dd4b39" onPress={() => {}} />
+          <Button title="Google+" color="#dd4b39" onPress={() => { }} />
         </View>
       </View>
-
-      <TouchableOpacity style={{ marginTop: 40 }} onPress={() => {}}>
+      <TouchableOpacity
+        style={{ marginTop: 40 }}
+        onPress={() => navigation.navigate("HomeDrawer")}
+      >
         <Text style={styles.linkText}>Don't Have an Account? Registration</Text>
       </TouchableOpacity>
     </View>
@@ -146,6 +143,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
+    marginBottom: 20,
+    marginTop: -50,
+    marginLeft: -250,
   },
   title: {
     fontSize: 24,

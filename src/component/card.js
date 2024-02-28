@@ -1,26 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import IconLabel from './iconlabel';
 
 const iconColor = '#6c5ce7';
 
 const RestaurantCard = ({ info }) => {
-  const { name, categories, deliveryTime, distance, image } = info;
+  const { name, categories, deliveryTime, distance, image, status } = info;
 
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <Image style={styles.imageStyle} source={image} />
         <View style={styles.infoStyle}>
-        <Text style={styles.categoryStyle}>{categories}</Text>
+          <Text style={styles.categoryStyle}>{categories}</Text>
           <Text style={styles.titleStyle}>{name}</Text>
-        
+
           <View style={styles.iconLabelStyle}>
-           <Text>{deliveryTime}</Text> 
-            
+            <Text>{deliveryTime}</Text>
+
           </View>
           <IconLabel name="location" label={distance} color={iconColor} />
+          <View style={styles.iconLabelStyle}>
+            <Icon name="clock-o" size={20} color="black" />
+            <Text style={{marginLeft:5,}}>{status}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -39,8 +43,8 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   cardContainer: {
-    width: '90%', 
-    height: 300,
+    width: '90%',
+    height: 320,
     borderRadius: radius,
     borderWidth: borderWidth,
     borderColor: borderColor,
