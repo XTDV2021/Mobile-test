@@ -43,6 +43,7 @@ const LoginScreen = ({ navigation }) => {
       console.log("response data");
     }
   };
+  // api tiếp theo là register
   // const handleGetStore = async () => {
   //   try {
   //     const accessToken = await AsyncStorage.getItem("accessToken");
