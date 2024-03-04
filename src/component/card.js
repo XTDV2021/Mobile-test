@@ -1,33 +1,59 @@
-import React from 'react';
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconLabel from './iconlabel';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { baseUrl } from "../utils/IP"; 
 
 const iconColor = '#6c5ce7';
 
+
 const RestaurantCard = ({ info }) => {
   const { name, categories, deliveryTime, distance, image, status } = info;
+  // const handleGetStore = async () => {
+  //   try {
+  //     const accessToken = await AsyncStorage.getItem("accessToken");
+  //     const instance = axios.create({
+  //       headers: { Authorization: `Bearer ${accessToken}` },
+  //     });
+  
+  //     const response = await instance.get(
+  //     `${baseUrl}/villas`
+  //     );
+  //     SetData(response.data.result);
+  //   } catch (error) {
+  //     console.log("response error", error);
+  //   } 
+  // };
+  // const result =  handleGetStore();
+  // const dataResult = result.then((value) =>{
+  //   // console.log(value); 
+  //   return value;
+  // })
+  // const [data, SetData] = useState(dataResult);
+  // const { address, villa_name, area, stiff_price,fluctuates_price, image, status } = data;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.cardContainer}>
-        <Image style={styles.imageStyle} source={image} />
-        <View style={styles.infoStyle}>
-          <Text style={styles.categoryStyle}>{categories}</Text>
-          <Text style={styles.titleStyle}>{name}</Text>
+    <View style={styles.container} >
+    <View style={styles.cardContainer}>
+      <Image style={styles.imageStyle} source={image} />
+      <View style={styles.infoStyle}>
+        <Text style={styles.categoryStyle}>{categories}</Text>
+        <Text style={styles.titleStyle}>{name}</Text>
 
-          <View style={styles.iconLabelStyle}>
-            <Text>{deliveryTime}</Text>
+        <View style={styles.iconLabelStyle}>
+          <Text>{deliveryTime}</Text>
 
-          </View>
-          <IconLabel name="location" label={distance} color={iconColor} />
-          <View style={styles.iconLabelStyle}>
-            <Icon name="clock-o" size={20} color="black" />
-            <Text style={{marginLeft:5,}}>{status}</Text>
-          </View>
+        </View>
+        <IconLabel name="location" label={distance} color={iconColor} />
+        <View style={styles.iconLabelStyle}>
+          <Icon name="clock-o" size={20} color="black" />
+          <Text style={{marginLeft:5,}}>{status}</Text>
         </View>
       </View>
     </View>
+  </View>
   );
 };
 

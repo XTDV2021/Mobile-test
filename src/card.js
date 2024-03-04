@@ -65,7 +65,7 @@ const ProductListingScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <SearchHeader />
       <ScrollView>
         <View style={styles.contentContainer}>

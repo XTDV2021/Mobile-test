@@ -17,12 +17,13 @@ const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-    // const request = axios.create({
-    //   headers: { Authorization: `Bearer ${accessToken}` },
-    // });
+  const requestToken = (token) => {
+    return axios.create({
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
   const handleSubmit = async () => {
     try {
-      console.log("info", username + password);
       const response = await axios.post(
         `${baseUrl}/users/login`,
         {
@@ -30,40 +31,22 @@ const LoginScreen = ({ navigation }) => {
           password: password,
         }
       );
-      console.log("response data", response.data);
-      // .accessToken
-      // await AsyncStorage.setItem("accessToken", response.data.accessToken);
-        // localStorage.setItem("accessToken", accessToken);
-        // axios.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
+      // console.log("response data", response.data.result.access_token);
+      // 
+      await AsyncStorage.setItem("accessToken", response.data.result.access_token);
+
+        // localStorage.setItem("accessToken", response.data.result.access_token);
+        axios.defaults.headers.common.Authorization = `Bearer ${response.data.result.access_token}`;
         navigation.navigate("HomeDrawer");
-      // handleGetStore();
     } catch (error) {
       console.log("response data", error);
     } finally {
       console.log("response data");
     }
   };
-  // api tiếp theo là register
-  // const handleGetStore = async () => {
-  //   try {
-  //     const accessToken = await AsyncStorage.getItem("accessToken");
-  //     console.log("token", accessToken);
-  //     const instance = axios.create({
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     });
 
-  //     const response = await instance.get(
-  //       "http://localhost:5000/api/v1/subdivisions/"
-  //     );
-  //     console.log("response data", response.data);
-  //   } catch (error) {
-  //     console.log("response error", error);
-  //   } finally {
-  //     console.log("response data");
-  //   }
-  // };
+  // api tiếp theo là register
+  
   return (
     <View style={styles.container}>
       <Image
@@ -130,7 +113,7 @@ const LoginScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity
         style={{ marginTop: 40 }}
-        onPress={() => navigation.navigate("HomeDrawer")}
+        onPress={() => navigation.navigate("Register")}
       >
         <Text style={styles.linkText}>Don't Have an Account? Registration</Text>
       </TouchableOpacity>

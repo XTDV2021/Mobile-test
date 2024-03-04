@@ -6,27 +6,24 @@ import {
   Text,
   View,
   Dimensions,
-  LogBox,
   TouchableOpacity,
   TextInput,
   Animated,
-  Button,
   ImageBackground,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { baseUrl } from "./utils/IP";
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import RestaurantCard from "./component/card";
 import Footer from "./footer/footer";
-import TopNavigation from "./subdivision/TopNavigation";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 const { height, width } = Dimensions.get('window');
 const HomeScreen = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [selectedLocation, setSelectedLocation] = useState('');
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const navigation = useNavigation();
@@ -36,7 +33,22 @@ const HomeScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const iconColor = '#6c5ce7';
+  const handleGetStore = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const instance = axios.create({
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
+      const response = await instance.get(
+        `${baseUrl}/subdivisions`
+      );
+      SetData(response.data.result);
+    } catch (error) {
+      console.log("response error", error);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -87,69 +99,44 @@ const HomeScreen = () => {
     },
   ];
 
-  const [restaurants, setRestaurants] = useState([
-    {
-      name: 'Small Metal Ball',
-      categories: '8424 Padberg Flats',
-      deliveryTime: '$ 316.00/Night - FreeCancellation',
-      distance: 'Bad(12)',
-      status: 'InActive',
-      image: require('../assets/9.jpg'),
-      id: 1,
-    },
-    {
-      name: 'Small Soft Ball',
-      categories: '43299 Murazik Extension',
-      deliveryTime: '$ 245.00/Night - FreeCancellation',
-      distance: 'Average(11)',
-      status: 'Active',
-      image: require('../assets/10.jpg'),
-      id: 2,
-    },
-    {
-      name: 'Incredible Wooden Ball',
-      categories: '73311 Freida Point',
-      deliveryTime: '$ 662.00/Night - FreeCancellation',
-      distance: 'Average(8)',
-      status: 'Active',
-      image: require('../assets/11.jpg'),
-      id: 3,
-    },
-    {
-      name: "Handcrafted Wooden Towels",
-      categories: '303 Volkman Lakes',
-      deliveryTime: '$ 170.00/Night - FreeCancellation',
-      distance: 'Good(5)',
-      status: 'InActive',
-      image: require('../assets/12.jpg'),
-      id: 4,
-    },
-    {
-      name: 'Handmade Wooden Mouse',
-      categories: '52623 Donnie Roads',
-      deliveryTime: '$ 223.00/Night - FreeCancellation',
-      distance: 'Good(14)',
-      status: 'InActive',
-      image: require('../assets/13.jpg'),
-      id: 5,
-    },
-  ]);
+  const handleGetVillas = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      const instance = axios.create({
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      const response = await instance.get(
+        `${baseUrl}/villas`
+      );
+      SetVilla(response.data.result);
+    } catch (error) {
+      console.log("response error", error);
+    }
+  };
+  const villas = handleGetVillas();
+  const villasResult = villas.then((value) => {
+    // console.log(value); 
+    return value;
+  })
+  const [villa, SetVilla] = useState(villasResult);
 
   const handleRestaurantPress = () => {
-    navigation.navigate('Subdivision'); // Chuyển hướng đến trang 'subdivision'
+    navigation.navigate('Subdivision');
   };
 
-  const [data, SetData] = useState([
-    { id: 'barcelona', image: 'http://s3.amazonaws.com/redqteam.com/tripfinder-images/barcelona.jpg', name: 'Barcelona', villas: 45667 },
-    { id: 'newyork', image: 'http://s3.amazonaws.com/redqteam.com/tripfinder-images/newyork.jpg', name: 'New York', villas: 19236 },
-    { id: 'london', image: 'http://s3.amazonaws.com/redqteam.com/tripfinder-images/london.jpg', name: 'London', villas: 54129 },
-    { id: 'sydney', image: 'http://s3.amazonaws.com/redqteam.com/tripfinder-images/sydney.jpg', name: 'Sydney', villas: 72770 },
-  ]);
+  const result = handleGetStore();
+  const dataResult = result.then((value) => {
+    // console.log(value); 
+    return value;
+  })
+
+  const [data, SetData] = useState(dataResult);
+
   const handlePress = () => {
     navigation.navigate('product');
   };
 
-  //  Display Images // UI
   const renderItem = ({ item, index }) => {
     return (
 
@@ -175,7 +162,6 @@ const HomeScreen = () => {
 
   const renderDotIndicators = () => {
     return carouselData.map((dot, index) => {
-      // Determine the style for the active and inactive dots
       const dotStyle = activeIndex === index
         ? styles.activeDot
         : styles.inactiveDot;
@@ -301,7 +287,6 @@ const HomeScreen = () => {
               pagingEnabled
               onScroll={e => {
                 const x = e.nativeEvent.contentOffset.x;
-                console.log(x / width - 50);
                 setCurrentIndex((x / (width - 50)).toFixed(0));
               }}
               horizontal
@@ -335,10 +320,9 @@ const HomeScreen = () => {
                             borderRadius: 10,
                             height: '90%'
                           }}>
-                            <Text style={styles.locationText}>{`${item.name} `}</Text>
-                            <Text style={styles.locationText1}>{`${item.villas} villas `}</Text>
+                            <Text style={styles.locationText}>{`${item.subdivision_name} `}</Text>
+                            <Text style={styles.locationText1}>{`${item.quantityVilla} villas `}</Text>
                           </View>
-
 
                           <TouchableOpacity
                             disabled={true}
@@ -386,7 +370,7 @@ const HomeScreen = () => {
           )}
         </View>
         <View style={styles.destinationContainer1}>
-          <Text style={styles.subHeading2}>Travelers'Choice:Top hotels</Text>
+          <Text style={styles.subHeading2}>Travelers'Choice:Top Villas</Text>
           <TouchableOpacity onPress={() => navigation.navigate('product')}>
             <Text style={styles.subHeading3}>Show all</Text>
           </TouchableOpacity>
@@ -394,14 +378,37 @@ const HomeScreen = () => {
       </View>
 
       <FlatList
-        data={restaurants}
+        data={villa}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={handleRestaurantPress}>
-            <RestaurantCard info={item} />
+            <View style={styles.container1} >
+              <View style={styles.cardContainer}>
+                <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
+                <View style={styles.infoStyle}>
+                  <Text style={styles.categoryStyle}>{`${item.address} `}</Text>
+                  <Text style={styles.titleStyle}>{`${item.villa_name} `}</Text>
+
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>area: {`${item.area} `}</Text>
+
+                  </View>
+                  <View style={styles.iconLabelStyle}>
+                    {/* <Icon name="clock-o" size={20} color="black" /> */}
+                    <Text style={{ marginLeft: 5, }}>stiff price: {`${item.stiff_price} `}$</Text>
+                  </View>
+
+                  <View style={styles.iconLabelStyle}>
+                    {/* <Icon name="clock-o" size={20} color="black" /> */}
+                    <Text style={{ marginLeft: 5, }}>status: {`${item.status} `}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
+      // keyExtractor={(item) => item.id.toString()}
+      // showsVerticalScrollIndicator={false}
+
       />
       <Footer />
     </ScrollView>
@@ -410,7 +417,10 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
+const offset = 40;
+const radius = 10;
+const borderWidth = 1;
+const borderColor = 'rgba(0, 0, 0, 0.1)';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -631,7 +641,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   locationText: {
-    color: 'white',
+    color: 'red',
     fontSize: 30,
     fontWeight: 'bold',
     position: 'absolute',
@@ -641,12 +651,51 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Canh giữa chữ theo chiều ngang
   },
   locationText1: {
-    color: 'white',
+    color: 'red',
     fontSize: 18,
     position: 'absolute',
     bottom: 120, // Điều chỉnh vị trí theo yêu cầu
     left: 0,
     right: 0,
     textAlign: 'center', // Canh giữa chữ theo chiều ngang
+  },
+  container1: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 25,
+  },
+  cardContainer: {
+    width: '90%',
+    height: 350,
+    borderRadius: radius,
+    borderWidth: borderWidth,
+    borderColor: borderColor,
+    overflow: 'hidden', // Để clip các phần viền ra khỏi card
+  },
+  imageStyle: {
+    height: 150,
+    width: '100%',
+    borderTopLeftRadius: radius,
+    borderTopRightRadius: radius,
+    opacity: 0.9,
+    alignContent: 'center',
+    alignSelf: 'center',
+  },
+  titleStyle: {
+    marginTop: 10,
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  categoryStyle: {
+    fontWeight: '200',
+  },
+  infoStyle: {
+    marginHorizontal: 10,
+    marginVertical: 5,
+  },
+  iconLabelStyle: {
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
   },
 });

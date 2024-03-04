@@ -34,7 +34,7 @@ const Address = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    marginBottom: 180,
+    marginBottom: 20,
   },
   text: {
     marginTop: 5,

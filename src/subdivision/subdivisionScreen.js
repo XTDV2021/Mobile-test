@@ -8,6 +8,7 @@ import SearchHeader from '../HeaderSearch';
 import AmenitiesScreen from '../Item';
 import Address from './address';
 import Book from './book';
+import Detail from './Details';
 const SubdivisionScreen = () => {
   const [selected, setSelected] = useState('');
   const scrollRef = useRef(null);
@@ -21,14 +22,17 @@ const SubdivisionScreen = () => {
         scrollToY = 0;
         break;
       case 'Overview':
-        scrollToY = 200;
+        scrollToY = 230;
         break;
       case 'Amenities':
-        scrollToY = 700; // Vị trí cần cuộn đến cho AmenitiesScreen
+        scrollToY = 720; // Vị trí cần cuộn đến cho AmenitiesScreen
         break;
       case 'Location':
         scrollToY = 1000; // Vị trí cần cuộn đến cho Address
         break;
+        case 'Detail':
+          scrollToY = 1200; // Vị trí cần cuộn đến cho Address
+          break;
       default:
         scrollToY = 0;
     }
@@ -52,6 +56,9 @@ const SubdivisionScreen = () => {
         <TouchableWithoutFeedback onPress={() => handlePress('Location')}>
           <Text style={[styles.headerItem, selected === 'Location' && { color: '#26AAA0' }]}>Location</Text>
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => handlePress('Detail')}>
+          <Text style={[styles.headerItem, selected === 'Detail' && { color: '#26AAA0' }]}>Detail</Text>
+        </TouchableWithoutFeedback>
       </ScrollView>
       
       <Animated.ScrollView
@@ -68,13 +75,11 @@ const SubdivisionScreen = () => {
             source={require('./banner.jpg')}
           />
         </View>
-        
         <Book />
         <DummyText />
         <AmenitiesScreen />
         <Address />
-       
-       
+        <Detail/>
       </Animated.ScrollView>
      
     </View>

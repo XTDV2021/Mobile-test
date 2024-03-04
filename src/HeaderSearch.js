@@ -17,7 +17,7 @@
         const navigation = useNavigation();
         
         const handleLogoPress = () => {
-            navigation.navigate('/');
+            navigation.navigate('HomeDrawer');
         };
         return (
             <View style={styles.header}>

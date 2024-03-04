@@ -5,11 +5,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/login";
 import HomeScreen from "./src/home";
 import RegisterScreen from "./src/register";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import ProfileScreen from "./src/profile";
 import SubdivisionScreen from "./src/subdivision/subdivisionScreen";
 import Location from "./src/Location";
 import ProductListingScreen from "./src/card";
 import { Text, View, TouchableOpacity } from "react-native";
+import ContractScreen from "./src/contract";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -28,18 +29,18 @@ const Sidebar = ({ navigation }) => {
           Home
         </Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
+      <TouchableOpacity
 				onPress={() => {
-					navigation.navigate('Login');
+					navigation.navigate('profile');
 					setIsPressed(true);
 				}}
 				style={{ marginBottom: 20 }}
 			>
-				<Text style={{ fontSize: 20, color: isPressed ? '#26AAA0' : '#000' }}>Login</Text>
-			</TouchableOpacity> */}
+				<Text style={{ fontSize: 20, color: isPressed ? '#26AAA0' : '#000' }}>Profile</Text>
+			</TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Login");
+          navigation.navigate('Login');
           setIsPressed(true);
         }}
         style={{ marginTop: 550 }}
@@ -61,6 +62,8 @@ function AuthStackNavigator() {
       <Stack.Screen name="Location" component={Location} />
       <Stack.Screen name="product" component={ProductListingScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen name="profile" component={ProfileScreen} />
+      <Stack.Screen name="Contract" component={ContractScreen} />
     </Stack.Navigator>
   );
 }
