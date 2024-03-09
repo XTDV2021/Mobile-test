@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
@@ -24,7 +24,11 @@ const Book = () => {
   };
 
   const handlePress = () => {
-    navigation.navigate('Contract');
+    if (startDate && endDate) {
+      navigation.navigate('Contract');
+    } else {
+      Alert.alert('Thông báo', 'Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
+    }
   };
 
   const handleStartDateChange = (event, selectedDate) => {

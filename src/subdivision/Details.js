@@ -1,11 +1,11 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { baseUrl } from '../utils/IP';
 
 const Detail = () => {
-const handleGetVillas = async () => {
+  const handleGetVillas = async () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
       const instance = axios.create({
@@ -15,28 +15,31 @@ const handleGetVillas = async () => {
       const response = await instance.get(
         `${baseUrl}/villas`
       );
-      SetVilla(response.data.result);
+      SetData(response.data.result);
     } catch (error) {
       console.log("response error", error);
     }
   };
-  const villas = handleGetVillas();
-  const villasResult = villas.then((value) => {
-    // console.log(value); 
+  const result = handleGetVillas();
+  const dataResult = result.then((value) => {
     return value;
   })
-  const [villa, SetVilla] = useState(villasResult);
-
+  const [data, SetData] = useState(dataResult);
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Detail</Text>
-          <Text style={styles.text}>Area: {`${villa.area} `}</Text>
-          <Text style={styles.text}>fluctuates_price:{`${villa.fluctuates_price} `}</Text>
-          <Text style={styles.text}>stiff_price: {`${villa.stiff_price} `}</Text>
-          <Text style={styles.text}>status: {`${villa.status} `}</Text>
-    </View>
+    <View style={styles.container}
+      data={data}
+      renderItem={({ item }) => (
+        <>
+          <Text style={styles.title}>Detail</Text>
+          <Text style={styles.text}>Area: {`${item.area} `}</Text>
+          <Text style={styles.text}>fluctuates_price: {`${item.fluctuates_price} $`}</Text>
+          <Text style={styles.text}>stiff_price:  {`${item.stiff_price} $`}</Text>
+          <Text style={styles.text}>status: {`${item.status} `}</Text>
+        </>
+      )}
+    />
   );
 };
 

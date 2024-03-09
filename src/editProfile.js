@@ -7,38 +7,40 @@ import { baseUrl } from "./utils/IP";
 import { useNavigation } from '@react-navigation/native';
 import formatDate from './utils/helper';
 
-const ProfileScreen = () => {
+const EditProfileScreen = () => {
+const [username, setUsername] = useState("");
+const [birthday, setBirthday] = useState("");
+const [rememberMe, setRememberMe] = useState(false);
+const navigation = useNavigation();
+const requestToken = (token) => {
+  return axios.create({
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+const handleSubmit = async () => {
+  try {
+    const user_Id = await AsyncStorage.getItem("user_id");
+    const response = await axios.post(
+        `${baseUrl}/accounts/${user_Id}`,
+      {
+        user_name: username,
+        birthday: password,
+      }
+    );
+    // console.log("response data", response.data.result.access_token);
+    await AsyncStorage.setItem("accessToken", response.data.result.access_token);
+    await AsyncStorage.setItem("user_id", response.data.result.user_id);
   
-  const navigation = useNavigation();
-
-  const handleGetStore = async () => {
-    try {
-      const accessToken = await AsyncStorage.getItem("accessToken");
-      const user_Id = await AsyncStorage.getItem("user_id");
-      const instance = axios.create({
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      const response = await instance.get(
-        `${baseUrl}/users/${user_Id}`
-      );
-      // 
-      SetData(response.data.user);
-    } catch (error) {
-      console.log("response error", error);
-    }
-  };
-  const result = handleGetStore();
-  const dataResult = result.then((value) => {
-    // console.log("gia tri data: ",value); 
-    return value;
-  })
-  const [data, SetData] = useState(dataResult);
-
+      axios.defaults.headers.common.Authorization = `Bearer ${response.data.result.access_token}`;
+      navigation.navigate("HomeDrawer");
+  } catch (error) {
+    console.log("response data", error);
+  } finally {
+    console.log("response data");
+  }
+};
   
-  const saveProfile = () => {
-   navigation.navigate("edit");
-  };
+
   const goBack = () => {
     navigation.navigate('HomeDrawer'); 
   };
@@ -91,8 +93,8 @@ const ProfileScreen = () => {
           editable={false}
         />
       </View>
-      <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Edit Profile</Text>
+      <TouchableOpacity onPress={handleSubmit} style={styles.saveButton}>
+        <Text style={styles.saveButtonText}>Save Profile</Text>
       </TouchableOpacity>
     </View>
   );
@@ -158,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default EditProfileScreen;

@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const ContractScreen = () => {
+    const [dateNow, setDateNow] = useState('');
+    const navigation = useNavigation();
     const [input1, setInput1] = useState('Hoàng');
     const [input2, setInput2] = useState('Trần Huy Hoàng');
     const [input3, setInput3] = useState('');
     const [input4, setInput4] = useState('');
-    const [dateNow, setDateNow] = useState('');
-    const navigation = useNavigation();
+
     const Confirm = () => {
-        navigation.navigate('BookSuccess');
-      };
+        if (input3.trim() !== '' && input4.trim() !== '') {
+            navigation.navigate('BookSuccess');
+        } else {
+            Alert.alert('Thông báo', 'Bạn chưa điền đủ thông tin. Vui lòng nhập ký và họ tên.');
+        }
+    };
     useEffect(() => {
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('vi-VN');
@@ -21,7 +26,7 @@ const ContractScreen = () => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Text style={{ fontWeight: 'bold', fontSize: 15, marginTop: 100, marginBottom: 10, textAlign: 'center' }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15, marginTop: 50, marginBottom: 10, textAlign: 'center' }}>
                     CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
                 </Text>
                 <Text style={{ fontWeight: 'bold', fontSize: 14, marginBottom: 40, textAlign: 'center' }}>

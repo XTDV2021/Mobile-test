@@ -17,9 +17,10 @@ import { baseUrl } from "./utils/IP";
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import Footer from "./footer/footer";
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 const { height, width } = Dimensions.get('window');
+const Tabs = React.lazy(() => import("./bottomNavigator"));
 const HomeScreen = () => {
 
   const [startDate, setStartDate] = useState(null);
@@ -33,7 +34,7 @@ const HomeScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const iconColor = '#6c5ce7';
+  // const iconColor = '#6c5ce7';
   const handleGetStore = async () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
@@ -42,7 +43,7 @@ const HomeScreen = () => {
       });
 
       const response = await instance.get(
-        `${baseUrl}/subdivisions`
+        `${baseUrl}/projects`
       );
       SetData(response.data.result);
     } catch (error) {
@@ -50,15 +51,15 @@ const HomeScreen = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={{ marginRight: 25 }} >
-          <Ionicons name="menu" size={30} color="#26AAA0" />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={{ marginRight: 25 }} >
+  //         <Ionicons name="menu" size={30} color="#26AAA0" />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   useEffect(() => {
     let interval = setInterval(() => {
@@ -98,32 +99,6 @@ const HomeScreen = () => {
       image: require("../assets/3.jpg"),
     },
   ];
-
-  const handleGetVillas = async () => {
-    try {
-      const accessToken = await AsyncStorage.getItem("accessToken");
-      const instance = axios.create({
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      const response = await instance.get(
-        `${baseUrl}/villas`
-      );
-      SetVilla(response.data.result);
-    } catch (error) {
-      console.log("response error", error);
-    }
-  };
-  const villas = handleGetVillas();
-  const villasResult = villas.then((value) => {
-    // console.log(value); 
-    return value;
-  })
-  const [villa, SetVilla] = useState(villasResult);
-
-  const handleRestaurantPress = () => {
-    navigation.navigate('Subdivision');
-  };
 
   const result = handleGetStore();
   const dataResult = result.then((value) => {
@@ -267,7 +242,7 @@ const HomeScreen = () => {
           {renderDotIndicators()}
         </View>
         <View style={styles.destinationContainer}>
-          <Text style={styles.subHeading}>Explore Destinations</Text>
+          <Text style={styles.subHeading}>Explore Project</Text>
           <TouchableOpacity onPress={() => navigation.navigate('product')}>
             <Text style={styles.subHeading1}>Show all</Text>
           </TouchableOpacity>
@@ -320,8 +295,8 @@ const HomeScreen = () => {
                             borderRadius: 10,
                             height: '90%'
                           }}>
-                            <Text style={styles.locationText}>{`${item.subdivision_name} `}</Text>
-                            <Text style={styles.locationText1}>{`${item.quantityVilla} villas `}</Text>
+                            <Text style={styles.locationText}>{`${item.project_name} `}</Text>
+                            <Text style={styles.locationText1}>{`${item.description} `}</Text>
                           </View>
 
                           <TouchableOpacity
@@ -369,55 +344,15 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         </View>
-        <View style={styles.destinationContainer1}>
-          <Text style={styles.subHeading2}>Travelers'Choice:Top Villas</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('product')}>
-            <Text style={styles.subHeading3}>Show all</Text>
-          </TouchableOpacity>
-        </View>
+       
       </View>
-
-      <FlatList
-        data={villa}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={handleRestaurantPress}>
-            <View style={styles.container1} >
-              <View style={styles.cardContainer}>
-                <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
-                <View style={styles.infoStyle}>
-                  <Text style={styles.categoryStyle}>{`${item.address} `}</Text>
-                  <Text style={styles.titleStyle}>{`${item.villa_name} `}</Text>
-
-                  <View style={styles.iconLabelStyle}>
-                    <Text style={{ marginLeft: 5, }}>area: {`${item.area} `}</Text>
-
-                  </View>
-                  <View style={styles.iconLabelStyle}>
-                    {/* <Icon name="clock-o" size={20} color="black" /> */}
-                    <Text style={{ marginLeft: 5, }}>stiff price: {`${item.stiff_price} `}$</Text>
-                  </View>
-
-                  <View style={styles.iconLabelStyle}>
-                    {/* <Icon name="clock-o" size={20} color="black" /> */}
-                    <Text style={{ marginLeft: 5, }}>status: {`${item.status} `}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      // keyExtractor={(item) => item.id.toString()}
-      // showsVerticalScrollIndicator={false}
-
-      />
-      <Footer />
     </ScrollView>
 
   );
 };
 
 export default HomeScreen;
-const offset = 40;
+// const offset = 40;
 const radius = 10;
 const borderWidth = 1;
 const borderColor = 'rgba(0, 0, 0, 0.1)';
@@ -492,7 +427,7 @@ const styles = StyleSheet.create({
   },
   subHeading1: {
     marginRight: 5,
-    fontSize: 18,
+    fontSize: 15,
 
   },
   subHeading2: {
@@ -502,7 +437,7 @@ const styles = StyleSheet.create({
   },
   subHeading3: {
     marginRight: 5,
-    fontSize: 18,
+    fontSize: 15,
 
   },
   headerContainer: {

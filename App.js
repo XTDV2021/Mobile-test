@@ -1,93 +1,76 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/login";
 import HomeScreen from "./src/home";
 import RegisterScreen from "./src/register";
 import ProfileScreen from "./src/profile";
-import SubdivisionScreen from "./src/subdivision/subdivisionScreen";
+import SubdivisionScreen from "./src/subdivision/orderScreen";
 import Location from "./src/Location";
-import ProductListingScreen from "./src/card";
-import { Text, View, TouchableOpacity } from "react-native";
-import ContractScreen from "./src/contract";
+import ProductListingScreen from "./src/subdivison";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import PostScreen from "./src/postcard";
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import HistoryScreen from "./src/History";
+import ProductScreen from "./src/villas";
+import ForgetPasswordScreen from "./src/forgotPassword";
+import ChangePasswordScreen from "./src/cofirmPassword";
+import VerifyScreen from "./src/bottomNavigator";
+
+
+
 
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
-
-const Sidebar = ({ navigation }) => {
-  const [isPressed, setIsPressed] = useState(false);
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "#fff", padding: 20 }}>
-      {/* Thêm các mục trong sidebar */}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("HomeDrawer")}
-        style={{ marginBottom: 20, marginTop: 50 }}
-      >
-        <Text style={{ fontSize: 20, color: isPressed ? "#26AAA0" : "#000" }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-				onPress={() => {
-					navigation.navigate('profile');
-					setIsPressed(true);
-				}}
-				style={{ marginBottom: 20 }}
-			>
-				<Text style={{ fontSize: 20, color: isPressed ? '#26AAA0' : '#000' }}>Profile</Text>
-			</TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Login');
-          setIsPressed(true);
-        }}
-        style={{ marginTop: 550 }}
-      >
-        <Text style={{ fontSize: 20, color: isPressed ? "#26AAA0" : "#000" }}>
-          Logout
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+const Tab = createBottomTabNavigator();
 
 function AuthStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Subdivision" component={SubdivisionScreen} />
+      <Stack.Screen name="Order" component={SubdivisionScreen} />
       <Stack.Screen name="Location" component={Location} />
       <Stack.Screen name="product" component={ProductListingScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="profile" component={ProfileScreen} />
-      <Stack.Screen name="Contract" component={ContractScreen} />
+      <Stack.Screen name="Villa" component={ProductScreen} />
+      <Stack.Screen name="Forget" component={ForgetPasswordScreen} />
+      <Stack.Screen name="ConfirmPassword" component={ChangePasswordScreen} />
+      <Stack.Screen name="Otp" component={VerifyScreen} />
     </Stack.Navigator>
   );
 }
-function HomeDrawerNavigator() {
+
+function MainTabNavigator() {
   return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerLeft: () => null,
-        drawerPosition: "right",
-        headerShown: true,
-      }}
-      drawerContent={(props) => <Sidebar {...props} />} // Truyền props vào Sidebar
-    >
-      <Drawer.Screen
-        name="TheLuxuryCity"
-        component={HomeScreen}
-        options={{
-          headerTitleStyle: {
-            color: "#26AAA0",
-            marginLeft: 12,
-          },
-        }}
-      />
-    </Drawer.Navigator>
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = focused ? 'home' : 'home-outline';
+        } else if (route.name === 'Post') {
+          iconName = focused ? 'newspaper' : 'newspaper-outline';
+        } else if (route.name === 'History') {
+          iconName = focused ? 'time' : 'time-outline';
+        } else if (route.name === 'Profile') {
+          iconName = focused ? 'people' : 'people-outline';
+        }
+
+        // Trả về component Icon từ thư viện Ionicons
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: '#26AAA0',
+      tabBarInactiveTintColor: 'gray',
+    })}
+  >
+    <Tab.Screen name="Home" component={HomeScreen} />
+    <Tab.Screen name="Post" component={PostScreen} />
+    <Tab.Screen name="History" component={HistoryScreen} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
+  </Tab.Navigator>
   );
 }
 
@@ -96,7 +79,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Auth" component={AuthStackNavigator} />
-        <Stack.Screen name="HomeDrawer" component={HomeDrawerNavigator} />
+        <Stack.Screen name="HomeDrawer" component={MainTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

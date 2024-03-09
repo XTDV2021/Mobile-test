@@ -11,12 +11,13 @@ import {
   Image,
 } from "react-native";
 import { baseUrl } from "./utils/IP";
+import { useNavigation } from '@react-navigation/native';
 
-
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigation = useNavigation();
   const requestToken = (token) => {
     return axios.create({
       headers: { Authorization: `Bearer ${token}` },
@@ -32,9 +33,10 @@ const LoginScreen = ({ navigation }) => {
         }
       );
       // console.log("response data", response.data.result.access_token);
-      // 
       await AsyncStorage.setItem("accessToken", response.data.result.access_token);
-
+      await AsyncStorage.setItem("user_id", response.data.result.user_id);
+      // await AsyncStorage.setItem("project_id", response.data.result.project_id);
+      // await AsyncStorage.setItem("subdivision_id", response.data.result.subdivision_id);
         // localStorage.setItem("accessToken", response.data.result.access_token);
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.result.access_token}`;
         navigation.navigate("HomeDrawer");
@@ -45,8 +47,9 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // api tiếp theo là register
-  
+  const handleForgot = () => {
+    navigation.navigate('Forget'); 
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -71,8 +74,8 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
       />
 
-      <View style={styles.checkboxContainer}>
-        <TouchableOpacity onPress={() => { }}>
+      <View style={styles.checkboxContainer} >
+        <TouchableOpacity onPress={handleForgot}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
