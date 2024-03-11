@@ -1,22 +1,24 @@
-import React, { useRef,useLayoutEffect, useState } from 'react';
-import { View, ScrollView, Text, Animated, FlatList, TouchableOpacity, StyleSheet, Image, ImageBackground, } from 'react-native';
-import SearchHeader from './HeaderSearch';
+import React, { useRef, useEffect, useState } from 'react';
+import { View, ScrollView, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, Modal, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { baseUrl } from "./utils/IP";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-// import Icon from 'react-native-vector-icons/FontAwesome'; 
+
 import formatDate from './utils/helper';
 const ProductListingScreen = () => {
   const navigation = useNavigation();
+  const [showMenu, setShowMenu] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [data, setData] = useState([]);
+  const inputRef = useRef(null);
   const handleRestaurantPress = () => {
-    navigation.navigate('Villa'); 
+    navigation.navigate('Villa');
   };
 
   const handleGetItem = async () => {
     try {
-      const project_id = await AsyncStorage.getItem("project_id");
       const accessToken = await AsyncStorage.getItem("accessToken");
       const instance = axios.create({
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -25,23 +27,87 @@ const ProductListingScreen = () => {
       const response = await instance.get(
         `${baseUrl}/subdivisions`
       );
-      SetData(response.data.result);
+      setData(response.data.result);
     } catch (error) {
       console.log("response error", error);
     }
   };
-  const result = handleGetItem();
-  const dataResult = result.then((value) => {
-    return value;
-  })
-  const [data, SetData] = useState(dataResult);
+
+  useEffect(() => {
+    handleGetItem();
+  }, []);
+
+  const handleSearch = () => {
+    const filteredData = data.filter(item =>
+      item.subdivision_name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setData(filteredData);
+  };
+
+  const handleEnterPress = () => {
+    if (searchText === '') {
+      handleGetItem();
+    } else {
+      handleSearch();
+    }
+  };
+
+  const handleMenuPress = () => {
+    setShowMenu(!showMenu);
+  };
+  const handleProject = () => {
+    navigation.navigate('Project');
+  };
+  const handlSubdivision = () => {
+    navigation.replace('product');
+  };
+  const handleVilla = () => {
+    navigation.navigate('Villa');
+  };
+  const handleReload = () => {
+    navigation.replace('product');
+  };
 
 
 
 
   return (
     <View style={styles.container} >
-      <SearchHeader />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleMenuPress}>
+          <Ionicons name="menu" size={24} color="#333" style={styles.menuIcon} />
+        </TouchableOpacity>
+        <TextInput
+          ref={inputRef}
+          placeholder="Search 'VietNam, Asia'"
+          placeholderTextColor="rgb(44, 44, 44)"
+          style={styles.input}
+          value={searchText}
+          onChangeText={text => setSearchText(text)}
+          onSubmitEditing={handleSearch}
+          onKeyPress={({ nativeEvent }) => {
+            if (nativeEvent.key === 'all') {
+              handleEnterPress();
+            }
+          }}
+        />
+      </View>
+      <Modal visible={showMenu} transparent={true} animationType="slide">
+        <View style={styles.menuContainer}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleProject}>
+            <Text style={styles.menuText}>Project</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={handlSubdivision}>
+            <Text style={styles.menuText}>Subdivision</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={handleVilla}>
+            <Text style={styles.menuText}>Villa</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={handleReload}>
+            <Text style={styles.menuText}>Reload</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <ScrollView>
         <View style={styles.contentContainer}>
           <Text style={styles.Title}>Subdivision</Text>
@@ -92,11 +158,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  // backButton: {
-  //   marginTop: 100,
-  //   marginBottom: 50, 
-  //   marginLeft: -350,
-  // },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    height: 120,
+    paddingTop: 30,
+  },
+  menuIcon: {
+    fontSize: 30,
+    marginLeft: -10,
+    marginRight: 20,
+  },
+  input: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    flex: 1,
+    backgroundColor: '#ddd',
+    height: 50,
+  },
+  menuIcon: {
+    fontSize: 30,
+    marginLeft: -10,
+    marginRight: 20,
+  },
+  menuContainer: {
+    position: 'absolute',
+    top: 120,
+    left: 0,
+    backgroundColor: '#fff',
+    elevation: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  menuItem: {
+    paddingVertical: 10,
+  },
+  menuText: {
+    fontSize: 16,
+  },
   contentContainer: {
     paddingTop: 20,
   },

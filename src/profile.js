@@ -39,6 +39,9 @@ const ProfileScreen = () => {
   const saveProfile = () => {
    navigation.navigate("edit");
   };
+  const logOutProfile = () => {
+    navigation.navigate("Login");
+   };
   const goBack = () => {
     navigation.navigate('HomeDrawer'); 
   };
@@ -70,7 +73,7 @@ const ProfileScreen = () => {
           style={styles.input}
           placeholder="Phone Number"
           value={data.phone_number}
-          onChangeText={text => SetData.phone_number(text)}
+          editable={false}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -79,7 +82,7 @@ const ProfileScreen = () => {
           style={styles.input}
           placeholder="Email"
           value={data.email}
-          onChangeText={text => SetData.email(text)}
+          editable={false}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -93,6 +96,9 @@ const ProfileScreen = () => {
       </View>
       <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Edit Profile</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={logOutProfile} style={styles.logOutButton}>
+        <Text style={styles.logOutButtonText}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -146,10 +152,24 @@ const styles = StyleSheet.create({
     height: 40,
     color: 'gray',
   },
+  logOutButton: {
+    backgroundColor: '#26AAA0',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    width: 100,
+  },
+  logOutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft:15,
+  },
   saveButton: {
     backgroundColor: '#26AAA0',
     padding: 10,
     borderRadius: 5,
+    marginTop: 10,
   },
   saveButtonText: {
     color: '#fff',

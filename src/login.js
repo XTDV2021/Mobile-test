@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Button,
   Image,
+  Alert,
 } from "react-native";
 import { baseUrl } from "./utils/IP";
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigation = useNavigation();
   const requestToken = (token) => {
     return axios.create({
@@ -32,12 +33,8 @@ const LoginScreen = () => {
           password: password,
         }
       );
-      // console.log("response data", response.data.result.access_token);
       await AsyncStorage.setItem("accessToken", response.data.result.access_token);
       await AsyncStorage.setItem("user_id", response.data.result.user_id);
-      // await AsyncStorage.setItem("project_id", response.data.result.project_id);
-      // await AsyncStorage.setItem("subdivision_id", response.data.result.subdivision_id);
-        // localStorage.setItem("accessToken", response.data.result.access_token);
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.result.access_token}`;
         navigation.navigate("HomeDrawer");
     } catch (error) {
@@ -79,7 +76,7 @@ const LoginScreen = () => {
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
-      {/* {error ? <Text style={styles.errorText}>{error}</Text> : null} */}
+    
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>

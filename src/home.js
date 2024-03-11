@@ -34,7 +34,7 @@ const HomeScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // const iconColor = '#6c5ce7';
+
   const handleGetStore = async () => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
@@ -50,16 +50,6 @@ const HomeScreen = () => {
       console.log("response error", error);
     }
   };
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={{ marginRight: 25 }} >
-  //         <Ionicons name="menu" size={30} color="#26AAA0" />
-  //       </TouchableOpacity>
-  //     ),
-  //   });
-  // }, [navigation]);
 
   useEffect(() => {
     let interval = setInterval(() => {
@@ -243,7 +233,7 @@ const HomeScreen = () => {
         </View>
         <View style={styles.destinationContainer}>
           <Text style={styles.subHeading}>Explore Project</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('product')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Project')}>
             <Text style={styles.subHeading1}>Show all</Text>
           </TouchableOpacity>
         </View>

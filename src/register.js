@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { baseUrl } from "./utils/IP";
 import axios from "axios";
 
@@ -13,7 +13,9 @@ const RegisterScreen = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [agreeWithTerms, setAgreeWithTerms] = useState(false);
-
+    const goToLogin = () => {
+        navigation.navigate('Login');
+      };
 
     const handleLogin = async () => {
         try {
@@ -47,7 +49,10 @@ const RegisterScreen = ({ navigation }) => {
 
         <View style={styles.container}>
             <View style={styles.checkboxContainer}>
-                <Text style={styles.linkText1}>TripFinder.</Text>
+                <Image
+                    source={require("../assets/the_oasis_luxury.png")}
+                    style={styles.logo}
+                />
             </View>
             <Text style={styles.title}>Welcome To TripFinder</Text>
             <Text style={styles.label}>Please Register for your account</Text>
@@ -111,7 +116,9 @@ const RegisterScreen = ({ navigation }) => {
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
 
-            <Text style={styles.orText}>Or Register Up With</Text>
+            <TouchableOpacity onPress={goToLogin}>
+                <Text style={styles.label1}>Back to login</Text>
+            </TouchableOpacity>
 
         </View>
     );
@@ -146,6 +153,13 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 20,
     },
+    label1: {
+        fontSize: 16,
+        marginBottom: 20,
+        marginTop: 20,
+        textDecorationLine: 'underline',
+        color: '#26AAA0'
+      },
     checkbox: {
         fontSize: 16,
     },
@@ -172,6 +186,14 @@ const styles = StyleSheet.create({
     },
     orText: {
         marginVertical: 10,
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        resizeMode: "contain",
+        marginBottom: -200,
+        marginTop: -50,
+        marginLeft: -250,
     },
 });
 

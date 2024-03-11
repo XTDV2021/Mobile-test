@@ -33,7 +33,9 @@ const ForgetPasswordScreen = ({ navigation }) => {
     }
   };
 
-  // api tiếp theo là register
+  const goToLogin = () => {
+    navigation.navigate('Login');
+  };
   
   return (
     <View style={styles.container}>
@@ -54,6 +56,9 @@ const ForgetPasswordScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Verify</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={goToLogin}>
+      <Text style={styles.label1}>Back to login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -78,6 +83,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  label1: {
+    fontSize: 16,
+    marginBottom: 20,
+    marginTop: 20,
+    textDecorationLine: 'underline',
+    color: '#26AAA0'
   },
   label: {
     fontSize: 16,

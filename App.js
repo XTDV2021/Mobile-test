@@ -16,6 +16,7 @@ import ProductScreen from "./src/villas";
 import ForgetPasswordScreen from "./src/forgotPassword";
 import ChangePasswordScreen from "./src/cofirmPassword";
 import VerifyScreen from "./src/bottomNavigator";
+import ProjectScreen from "./src/Project";
 
 
 
@@ -37,6 +38,7 @@ function AuthStackNavigator() {
       <Stack.Screen name="Forget" component={ForgetPasswordScreen} />
       <Stack.Screen name="ConfirmPassword" component={ChangePasswordScreen} />
       <Stack.Screen name="Otp" component={VerifyScreen} />
+      <Stack.Screen name="Project" component={ProjectScreen} />
     </Stack.Navigator>
   );
 }
