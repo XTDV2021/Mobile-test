@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, TouchableOpacity, View, TextInput, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { baseUrl } from "../utils/IP";
+import { baseUrl } from '../utils/IP';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -19,7 +19,6 @@ const VerifyScreen = () => {
         const emaill = await AsyncStorage.getItem("email");
         const OTP = otp.join('');
         
-        // Kiểm tra nếu không nhập đủ 6 ký tự
         if (OTP.length !== 6) {
             Alert.alert("Error", "Please enter a valid 6-digit OTP");
             return;

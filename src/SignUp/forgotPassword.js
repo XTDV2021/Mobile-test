@@ -9,26 +9,26 @@ import {
   StyleSheet,
   Button,
   Image,
-  Alert 
+  Alert // Import Alert từ react-native
 } from "react-native";
 import { baseUrl } from "../utils/IP";
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State để lưu thông báo lỗi
 
   const handleSubmit = async () => {
     if (!email) {
-     
+      // Kiểm tra nếu email không được nhập
       setErrorMessage("Please enter your email");
       return; 
     }
 
     if (!isValidEmail(email)) {
-  
+
       setErrorMessage("Please enter a valid email");
-      return; 
+      return;
     }
 
     try {
@@ -51,7 +51,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
     navigation.navigate('Login');
   };
 
-
+  // Hàm kiểm tra định dạng email
   const isValidEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };

@@ -65,7 +65,7 @@ const ProductListingScreen = () => {
     navigation.navigate('Villa');
   };
   const handleReload = () => {
-    navigation.replace('product');
+    navigation.navigate('HomeDrawer');
   };
 
 
@@ -104,11 +104,11 @@ const ProductListingScreen = () => {
             <Text style={styles.menuText}>Villa</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={handleReload}>
-            <Text style={styles.menuText}>Reload</Text>
+            <Text style={styles.menuText}>Home</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-      <ScrollView>
+      
         <View style={styles.contentContainer}>
           <Text style={styles.Title}>Subdivision</Text>
           <FlatList
@@ -145,7 +145,6 @@ const ProductListingScreen = () => {
 
           />
         </View>
-      </ScrollView>
     </View>
   );
 };
@@ -204,6 +203,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 20,
+    marginBottom: 200,
   },
   Title: {
     textAlign: 'center',

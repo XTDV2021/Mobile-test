@@ -67,7 +67,7 @@ const ProjectScreen = () => {
         navigation.navigate('Villa');
     };
     const handleReload = () => {
-        navigation.replace('Project');
+        navigation.navigate('HomeDrawer');
     };
     return (
         <View style={styles.container} >
@@ -102,44 +102,44 @@ const ProjectScreen = () => {
                         <Text style={styles.menuText}>Villa</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleReload}>
-                        <Text style={styles.menuText}>Reload</Text>
+                        <Text style={styles.menuText}>Home</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
-            <ScrollView>
-                <View style={styles.contentContainer}>
-                    <Text style={styles.Title}>Project</Text>
-                    <FlatList
-                        data={data}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity onPress={handleRestaurantPress}>
-                                <View style={styles.container1} >
-                                    <View style={styles.cardContainer}>
-                                        <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
-                                        <View style={styles.infoStyle}>
-                                            <Text style={styles.titleStyle}>{`${item.project_name} `}</Text>
-                                            <View style={styles.iconLabelStyle}>
-                                                <Text style={{ marginLeft: 5 }}>about: {`${item.description} `}</Text>
+
+            <View style={styles.contentContainer}>
+                <Text style={styles.Title}>Project</Text>
+                <FlatList
+                    data={data}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={handleRestaurantPress}>
+                            <View style={styles.container1} >
+                                <View style={styles.cardContainer}>
+                                    <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
+                                    <View style={styles.infoStyle}>
+                                        <Text style={styles.titleStyle}>{`${item.project_name} `}</Text>
+                                        <View style={styles.iconLabelStyle}>
+                                            <Text style={{ marginLeft: 5 }}>about: {`${item.description} `}</Text>
+                                        </View>
+                                        <View style={styles.iconLabelStyle}>
+                                            <Text style={{ marginLeft: 5 }}>Time: {formatDate(item.start_date)}</Text>
+                                            <View style={styles.dashContainer}>
+                                                <View style={styles.dash}></View>
                                             </View>
-                                            <View style={styles.iconLabelStyle}>
-                                                <Text style={{ marginLeft: 5 }}>Time: {formatDate(item.start_date)}</Text>
-                                                <View style={styles.dashContainer}>
-                                                    <View style={styles.dash}></View>
-                                                </View>
-                                                <Text style={{ marginLeft: 5 }}>{formatDate(item.end_date)}</Text>
-                                            </View>
-                                            <View style={styles.iconLabelStyle}>
-                                                <Text style={{ marginLeft: 5 }}>status: {`${item.status} `}</Text>
-                                            </View>
+                                            <Text style={{ marginLeft: 5 }}>{formatDate(item.end_date)}</Text>
+                                        </View>
+                                        <View style={styles.iconLabelStyle}>
+                                            <Text style={{ marginLeft: 5 }}>status: {`${item.status} `}</Text>
                                         </View>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
-                        )}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
-            </ScrollView>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
+
         </View>
     );
 };
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingTop: 20,
-        marginBottom: 50,
+        marginBottom: 200,
     },
     Title: {
         textAlign: 'center',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         width: '90%',
-        height: 320,
+        height: 380,
         borderRadius: radius,
         borderWidth: borderWidth,
         borderColor: borderColor,

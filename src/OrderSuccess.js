@@ -8,28 +8,12 @@ export default function OrderSucess() {
 
     const heartRef = useRef(null);
     const giftRef = useRef(null);
-    const [liked, setLiked] = useState(false);
     const navigation = useNavigation();
     
     useEffect(() => {
         heartRef?.current?.play(0, 30);
         giftRef?.current?.play(0, 1)
     }, []);
-
-    const handleLike = () => {
-        if (liked) {
-            heartRef?.current?.reset();
-        } else {
-            heartRef?.current?.play(30, 144);
-        }
-
-        setLiked(!liked);
-
-    }
-    const openGift = () => {
-        giftRef?.current?.play(1, 240);
-
-    }
     const Confirm = () => {
         navigation.navigate('product');
       };

@@ -17,7 +17,19 @@ const RegisterScreen = ({ navigation }) => {
         navigation.navigate('Login');
       };
 
-    const handleLogin = async () => {
+      const handleLogin = async () => {
+        // Kiểm tra xem tất cả các trường đã được nhập đúng không
+        if (!username || !password || !phone || !email || !fullname || !birthday || !confirmPassword) {
+            alert('Please fill in all fields.');
+            return;
+        }
+        
+        // Kiểm tra xem mật khẩu và xác nhận mật khẩu có khớp nhau không
+        if (password !== confirmPassword) {
+            alert('Passwords do not match.');
+            return;
+        }
+    
         try {
             const response = await axios.post(
                 `${baseUrl}/users/register`,

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, Animated, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import SearchHeader from './HeaderSearch';
+import React, { useState, useRef } from 'react';
+import { View, TextInput, Text, Animated, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { baseUrl } from "./utils/IP";
@@ -29,55 +29,84 @@ const HistoryScreen = () => {
     return value;
   });
   const [data, SetData] = useState(dataResult);
+  const [searchText, setSearchText] = useState('');
+  const inputRef = useRef(null);
+  const handleSearch = () => {
+    const filteredData = data.filter(item =>
+      item.villa_name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    SetData(filteredData);
+  };
 
-
+  const handleEnterPress = () => {
+    if (searchText === '') {
+      handleGetItem();
+    } else {
+      handleSearch();
+    }
+  };
 
   return (
     <View style={styles.container} >
-      <SearchHeader />
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          <Text style={styles.Title}>Your History</Text>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
+      <View style={styles.header}>
+        <TextInput
+          ref={inputRef}
+          placeholder="Search 'VietNam, Asia'"
+          placeholderTextColor="rgb(44, 44, 44)"
+          style={styles.input}
+          value={searchText}
+          onChangeText={text => setSearchText(text)}
+          onSubmitEditing={handleSearch}
+          onKeyPress={({ nativeEvent }) => {
+            if (nativeEvent.key === 'Enter') {
+              handleEnterPress();
+            }
+          }}
+        />
+      </View>
 
-              <View style={styles.container1} >
-                <View style={styles.cardContainer}>
-                  <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
-                  <View style={styles.infoStyle}>
-                    <Text style={styles.categoryStyle}>{`${item.address} `}</Text>
-                    <Text style={styles.titleStyle}>{`${item.villa_name} `}</Text>
+      <View style={styles.contentContainer}>
+        <Text style={styles.Title}>Your History</Text>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
 
-                    <View style={styles.iconLabelStyle}>
-                      <Text style={{ marginLeft: 5, }}>Time: {formatDate(item.insert_date)}</Text>
-                      <View style={styles.dashContainer}>
-                        <View style={styles.dash}></View>
-                      </View>
-                      <Text style={{ marginLeft: 5, }}>{formatDate(item.update_date)}</Text>
+            <View style={styles.container1} >
+              <View style={styles.cardContainer}>
+                <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
+                <View style={styles.infoStyle}>
+                  <Text style={styles.categoryStyle}>{`${item.address} `}</Text>
+                  <Text style={styles.titleStyle}>{`${item.villa_name} `}</Text>
+
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>Time: {formatDate(item.insert_date)}</Text>
+                    <View style={styles.dashContainer}>
+                      <View style={styles.dash}></View>
                     </View>
-                    <View style={styles.iconLabelStyle}>
-                      <Text style={{ marginLeft: 5, }}>area: {`${item.area} `}</Text>
-                    </View>
-                    <View style={styles.iconLabelStyle}>
-                      <Text style={{ marginLeft: 5, }}>fluctuates_price: {`${item.fluctuates_price} $ `}</Text>
-                    </View>
-                    <View style={styles.iconLabelStyle}>
-                      <Text style={{ marginLeft: 5, }}>stiff_price: {`${item.stiff_price} $ `}</Text>
-                    </View>
-                    <View style={styles.iconLabelStyle}>
-                      <Text style={{ marginLeft: 5, }}>status: {`${item.status} `}</Text>
-                    </View>
+                    <Text style={{ marginLeft: 5, }}>{formatDate(item.update_date)}</Text>
+                  </View>
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>area: {`${item.area} `}</Text>
+                  </View>
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>fluctuates_price: {`${item.fluctuates_price} $ `}</Text>
+                  </View>
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>stiff_price: {`${item.stiff_price} $ `}</Text>
+                  </View>
+                  <View style={styles.iconLabelStyle}>
+                    <Text style={{ marginLeft: 5, }}>status: {`${item.status} `}</Text>
                   </View>
                 </View>
               </View>
+            </View>
 
-            )}
-            showsVerticalScrollIndicator={false}
+          )}
+          showsVerticalScrollIndicator={false}
 
-          />
-        </View>
-      </ScrollView>
+        />
+      </View>
+
     </View>
   );
 };
@@ -89,6 +118,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    height: 120,
+    paddingTop: 30,
+},
+input: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    flex: 1,
+    backgroundColor: '#ddd',
+    height: 50,
+},
   contentContainer: {
     paddingTop: 20,
     marginBottom: 50,

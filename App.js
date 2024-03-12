@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/login";
 import HomeScreen from "./src/home";
-import RegisterScreen from "./src/register";
+
 import ProfileScreen from "./src/profile";
 import SubdivisionScreen from "./src/subdivision/orderScreen";
 import Location from "./src/Location";
@@ -13,10 +13,13 @@ import PostScreen from "./src/postcard";
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import HistoryScreen from "./src/History";
 import ProductScreen from "./src/villas";
-import ForgetPasswordScreen from "./src/forgotPassword";
-import ChangePasswordScreen from "./src/cofirmPassword";
-import VerifyScreen from "./src/bottomNavigator";
+import ForgetPasswordScreen from "./src/SignUp/forgotPassword";
+import ChangePasswordScreen from "./src/SignUp/cofirmPassword";
+import VerifyScreen from "./src/SignUp/verify";
 import ProjectScreen from "./src/Project";
+import ContractScreen from "./src/contract";
+import OrderSucess from "./src/OrderSuccess";
+import RegisterScreen from "./src/SignUp/register";
 
 
 
@@ -31,6 +34,8 @@ function AuthStackNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Order" component={SubdivisionScreen} />
       <Stack.Screen name="Location" component={Location} />
+      <Stack.Screen name="Contract" component={ContractScreen} />
+      <Stack.Screen name="BookSuccess" component={OrderSucess} />
       <Stack.Screen name="product" component={ProductListingScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="profile" component={ProfileScreen} />

@@ -11,7 +11,7 @@ import {
   Image,
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { baseUrl } from "../utils/IP";
+import { baseUrl } from "./utils/IP";
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
@@ -25,6 +25,7 @@ const LoginScreen = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
@@ -41,14 +42,13 @@ const LoginScreen = () => {
     } catch (error) {
       setErrorMessage("Invalid username or password");
       console.log("response data", error);
-    } finally {
-      console.log("response data");
     }
   };
 
   const handleForgot = () => {
     navigation.navigate('Forget');
   };
+
   return (
     <View style={styles.container}>
       <Image
@@ -69,8 +69,7 @@ const LoginScreen = () => {
         <TextInput
           style={styles.passwordInput}
           placeholder="Password"
-          secureTextEntry={!showPassword} // Sử dụng !showPassword để ẩn hoặc hiện mật khẩu
-          value={password}
+          secureTextEntry={!showPassword} 
           onChangeText={setPassword}
         />
         <TouchableOpacity
@@ -84,7 +83,9 @@ const LoginScreen = () => {
           />
         </TouchableOpacity>
       </View>
+
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
       <View style={styles.checkboxContainer} >
         <TouchableOpacity onPress={handleForgot}>
           <Text style={styles.linkText}>Forgot Password?</Text>
@@ -142,10 +143,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  errorText: {
-    color: "red",
-    marginBottom: 10,
-  },
   logo: {
     width: 100,
     height: 100,
@@ -174,6 +171,24 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 10,
+    marginBottom: 10,
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: 12
+  },
   checkboxContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -201,24 +216,6 @@ const styles = StyleSheet.create({
   },
   orText: {
     marginVertical: 10,
-  },
-  passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 10,
-  },
-  passwordInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 10,
-    marginBottom: 10,
-  },
-  iconContainer: {
-    position: 'absolute',
-    right: 10,
-    top: 12
   },
 });
 

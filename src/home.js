@@ -17,16 +17,11 @@ import { baseUrl } from "./utils/IP";
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import formatDate from './utils/helper';
 
 const { height, width } = Dimensions.get('window');
-const Tabs = React.lazy(() => import("./bottomNavigator"));
+// const Tabs = React.lazy(() => import("./bottomNavigator"));
 const HomeScreen = () => {
-
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const navigation = useNavigation();
   const flatlistRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -139,17 +134,6 @@ const HomeScreen = () => {
       );
     });
   }
-  const handleStartDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || startDate;
-    setShowStartDatePicker(false);
-    setStartDate(currentDate);
-  };
-
-  const handleEndDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || endDate;
-    setShowEndDatePicker(false);
-    setEndDate(currentDate);
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -174,50 +158,21 @@ const HomeScreen = () => {
         {/* Search Container */}
         <View style={styles.searchContainer}>
           {/* Heading */}
-          <Text style={styles.heading}>Latest reviews. Lowest prices.</Text>
+          <Text style={[styles.heading, { textAlign: 'center' }]}>
+            let explore and at the end leave your comments
+          </Text>
 
           {/* Search Input */}
           <View style={styles.inputContainer}>
-            <Ionicons name="search" size={20} color="#26AAA0" />
             <TextInput
               style={styles.input}
-              placeholder="Search 'Thailand, Asia'"
+              placeholder="Your Opinion"
+              textAlignVertical="top"
             />
           </View>
 
-          {/* Date Range Input... */}
-          <View style={styles.dateRangeContainer}>
-            <View style={styles.dateInput}>
-              <TouchableOpacity onPress={() => setShowStartDatePicker(true)}>
-                <Text>{startDate ? startDate.toDateString() : 'Select Start Date'}</Text>
-              </TouchableOpacity>
-              {showStartDatePicker && (
-                <DateTimePicker
-                  value={startDate || new Date()}
-                  mode="date"
-                  display="default"
-                  onChange={handleStartDateChange}
-                />
-              )}
-            </View>
-            <View style={styles.dash} />
-            <View style={styles.dateInput}>
-              <TouchableOpacity onPress={() => setShowEndDatePicker(true)}>
-                <Text>{endDate ? endDate.toDateString() : 'Select End Date'}</Text>
-              </TouchableOpacity>
-              {showEndDatePicker && (
-                <DateTimePicker
-                  value={endDate || new Date()}
-                  mode="date"
-                  display="default"
-                  onChange={handleEndDateChange}
-                />
-              )}
-            </View>
-          </View>
-
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Find Hotels</Text>
+            <Text style={styles.buttonText}>Send</Text>
           </TouchableOpacity>
         </View>
 
@@ -286,9 +241,15 @@ const HomeScreen = () => {
                             height: '90%'
                           }}>
                             <Text style={styles.locationText}>{`${item.project_name} `}</Text>
-                            <Text style={styles.locationText1}>{`${item.description} `}</Text>
-                          </View>
+                            <View style={styles.locationText1}>
+                              <Text style={styles.Text}>{formatDate(item.insert_date)}</Text>
+                              <View style={styles.dashContainer1}>
+                                <View style={styles.dash1}></View>
+                              </View>
+                              <Text style={styles.Text}>{formatDate(item.update_date)}</Text>
+                            </View>
 
+                          </View>
                           <TouchableOpacity
                             disabled={true}
                             style={{
@@ -334,7 +295,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         </View>
-       
+
       </View>
     </ScrollView>
 
@@ -350,7 +311,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
+  Text: {
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 40,
+    marginTop: 200,
+  },
   backgroundImage: {
     height: 310,
     justifyContent: 'center',
@@ -360,7 +326,19 @@ const styles = StyleSheet.create({
     color: '#26AAA0',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  dashContainer1: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 2,
+    marginLeft: 50,
+    marginTop: 200,
+  },
 
+  dash1: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    width: 10, 
   },
   searchContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -486,11 +464,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    marginLeft: 10,
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
     borderRadius: 5,
+    height: 100,
   },
   dateInput: {
     flex: 1,
@@ -566,7 +544,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   locationText: {
-    color: 'red',
+    color: 'white',
     fontSize: 30,
     fontWeight: 'bold',
     position: 'absolute',
@@ -575,14 +553,10 @@ const styles = StyleSheet.create({
     right: 0,
     textAlign: 'center', // Canh giữa chữ theo chiều ngang
   },
-  locationText1: {
-    color: 'red',
-    fontSize: 18,
-    position: 'absolute',
-    bottom: 120, // Điều chỉnh vị trí theo yêu cầu
-    left: 0,
-    right: 0,
-    textAlign: 'center', // Canh giữa chữ theo chiều ngang
+    locationText1: {
+      flexDirection: 'row', 
+      alignItems: 'center', 
+
   },
   container1: {
     width: '100%',

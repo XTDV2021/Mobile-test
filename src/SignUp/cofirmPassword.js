@@ -18,18 +18,19 @@ const ChangePasswordScreen = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleSubmit = async () => {
-        // Kiểm tra nếu mật khẩu hoặc xác nhận mật khẩu không được nhập
+     
         if (!password || !confirmPassword) {
             Alert.alert("Error", "Please enter both password and confirm password");
             return;
         }
-
-        // Kiểm tra nếu mật khẩu và xác nhận mật khẩu không trùng khớp
+    
+     
         if (password !== confirmPassword) {
             Alert.alert("Error", "Passwords do not match. Please try again.");
             return;
         }
-
+    
+     
         const email = await AsyncStorage.getItem("email");
         try {
             const response = await axios.post(
@@ -49,6 +50,7 @@ const ChangePasswordScreen = ({ navigation }) => {
             console.log("response data");
         }
     };
+    
 
     return (
         <View style={styles.container}>

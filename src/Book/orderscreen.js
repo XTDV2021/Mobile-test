@@ -14,7 +14,7 @@ const OrderScreen = () => {
 
   const handlePress = (title) => {
     setSelected(title);
-   
+
     let scrollToY = 0;
     switch (title) {
       case 'Book':
@@ -24,14 +24,14 @@ const OrderScreen = () => {
         scrollToY = 230;
         break;
       case 'Amenities':
-        scrollToY = 720; 
+        scrollToY = 720;
         break;
       case 'Location':
-        scrollToY = 1000; 
+        scrollToY = 1000;
         break;
-        case 'Detail':
-          scrollToY = 1200; 
-          break;
+      // case 'Detail':
+      //   scrollToY = 1200;
+      //   break;
       default:
         scrollToY = 0;
     }
@@ -40,9 +40,11 @@ const OrderScreen = () => {
   const scrollA = useRef(new Animated.Value(0)).current;
   return (
     <View>
-   
+      <View style={styles.header}>
+        <Text>Let Order</Text>
+      </View>
       <ScrollView horizontal={true} style={styles.headerContainer}>
-      <TouchableWithoutFeedback onPress={() => handlePress('Book')}>
+        <TouchableWithoutFeedback onPress={() => handlePress('Book')}>
           <Text style={[styles.headerItem, selected === 'Book' && { color: '#26AAA0' }]}>Book</Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => handlePress('Overview')}>
@@ -54,11 +56,11 @@ const OrderScreen = () => {
         <TouchableWithoutFeedback onPress={() => handlePress('Location')}>
           <Text style={[styles.headerItem, selected === 'Location' && { color: '#26AAA0' }]}>Location</Text>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => handlePress('Detail')}>
+        {/* <TouchableWithoutFeedback onPress={() => handlePress('Detail')}>
           <Text style={[styles.headerItem, selected === 'Detail' && { color: '#26AAA0' }]}>Detail</Text>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
       </ScrollView>
-      
+
       <Animated.ScrollView
         ref={scrollRef}
         onScroll={Animated.event(
@@ -77,15 +79,34 @@ const OrderScreen = () => {
         <DummyText />
         {/* <AmenitiesScreen /> */}
         <Address />
-        <Detail/>
+        <Detail />
       </Animated.ScrollView>
-     
+
     </View>
-    
+
   );
 };
 export default OrderScreen;
 const styles = {
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    height: 120,
+    paddingTop: 30,
+  },
+  input: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    flex: 1,
+    backgroundColor: '#ddd',
+    height: 50,
+  },
   headerContainer: {
     flexDirection: 'row',
     backgroundColor: 'rgba(242, 242, 242, 0.8)',

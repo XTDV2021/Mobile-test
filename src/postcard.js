@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, Animated, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import SearchHeader from './HeaderSearch';
+import React, { useState, useRef } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -10,6 +10,8 @@ import formatDate from './utils/helper';
 
 const PostScreen = () => {
     const [likedItems, setLikedItems] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const inputRef = useRef(null);
     const handleGetItem = async () => {
         try {
             const accessToken = await AsyncStorage.getItem("accessToken");
@@ -34,47 +36,75 @@ const PostScreen = () => {
     const handleLikePress = (item) => {
         const isLiked = likedItems.includes(item.id); // Check if item is already liked
         setLikedItems((prevLikedItems) =>
-          isLiked
-            ? prevLikedItems.filter((id) => id !== item.id) // Remove from liked list
-            : [...prevLikedItems, item.id] // Add to liked list
+            isLiked
+                ? prevLikedItems.filter((id) => id !== item.id) // Remove from liked list
+                : [...prevLikedItems, item.id] // Add to liked list
         );
-      };
+    };
+    const handleSearch = () => {
+        const filteredData = data.filter(item =>
+            item.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+        SetData(filteredData);
+    };
+
+    const handleEnterPress = () => {
+        if (searchText === '') {
+            handleGetItem();
+        } else {
+            handleSearch();
+        }
+    };
 
     return (
         <View style={styles.container}>
-            <SearchHeader />
-            <ScrollView>
-                <View style={styles.contentContainer}>
-                    <FlatList
-                        data={data}
-                        renderItem={({ item }) => (
-                            <View style={styles.container1}>
-                                <View style={styles.cardContainer}>
-                                    <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
-                                    <View style={styles.infoStyle}>
-                                        <Text style={styles.titleStyle}>{`${item.title} `}</Text>
-                                        <TouchableOpacity onPress={() => handleLikePress(item)} style={styles.likeIconContainer}>
-                                            <Ionicons name={likedItems.includes(item.id) ? 'heart' : 'heart-outline'} size={30} color={likedItems.includes(item.id) ? 'pink' : 'black'} />
-                                        </TouchableOpacity>
-                                        <View style={styles.iconLabelStyle}>
-                                            <Text style={{ marginLeft: 5 }}>Time: {formatDate(item.insert_date)}</Text>
-                                            <View style={styles.dashContainer}>
-                                                <View style={styles.dash}></View>
-                                            </View>
-                                            <Text style={{ marginLeft: 5 }}>{formatDate(item.update_date)}</Text>
+            <View style={styles.header}>
+                <TextInput
+                    ref={inputRef}
+                    placeholder="Search 'VietNam, Asia'"
+                    placeholderTextColor="rgb(44, 44, 44)"
+                    style={styles.input}
+                    value={searchText}
+                    onChangeText={text => setSearchText(text)}
+                    onSubmitEditing={handleSearch}
+                    onKeyPress={({ nativeEvent }) => {
+                        if (nativeEvent.key === 'Enter') {
+                            handleEnterPress();
+                        }
+                    }}
+                />
+            </View>
+            <View style={styles.contentContainer}>
+                <FlatList
+                    data={data}
+                    renderItem={({ item }) => (
+                        <View style={styles.container1}>
+                            <View style={styles.cardContainer}>
+                                <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />
+                                <View style={styles.infoStyle}>
+                                    <Text style={styles.titleStyle}>{`${item.title} `}</Text>
+                                    <TouchableOpacity onPress={() => handleLikePress(item)} style={styles.likeIconContainer}>
+                                        <Ionicons name={likedItems.includes(item.id) ? 'heart' : 'heart-outline'} size={30} color={likedItems.includes(item.id) ? 'pink' : 'black'} />
+                                    </TouchableOpacity>
+                                    <View style={styles.iconLabelStyle}>
+                                        <Text style={{ marginLeft: 5 }}>Time: {formatDate(item.insert_date)}</Text>
+                                        <View style={styles.dashContainer}>
+                                            <View style={styles.dash}></View>
                                         </View>
-                                        <View style={styles.iconLabelStyle}>
-                                            <Text style={{ marginLeft: 5 }}>{`${item.description_detail}`}</Text>
-                                        </View>
-                                   
+                                        <Text style={{ marginLeft: 5 }}>{formatDate(item.update_date)}</Text>
                                     </View>
+                                    <View style={styles.iconLabelStyle}>
+                                        <Text style={{ marginLeft: 5 }}>{`${item.description_detail}`}</Text>
+                                    </View>
+
                                 </View>
                             </View>
-                        )}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
-            </ScrollView>
+                        </View>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
+
         </View>
     );
 };
@@ -82,6 +112,25 @@ const PostScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        height: 120,
+        paddingTop: 30,
+    },
+    input: {
+        fontSize: 18,
+        paddingHorizontal: 10,
+        flex: 1,
+        backgroundColor: '#ddd',
+        height: 50,
     },
     contentContainer: {
         paddingTop: 20,
