@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import axios from "axios";
+// import { baseUrl } from "./utils/IP";
 
 const Address = () => {
   const navigation = useNavigation(); 
@@ -8,7 +11,25 @@ const Address = () => {
   const handlePress = () => {
     navigation.navigate('Location');
   };
+  // const handleGetItem = async () => {
+  //   try {
+  //     const accessToken = await AsyncStorage.getItem("accessToken");
+  //     const instance = axios.create({
+  //       headers: { Authorization: `Bearer ${accessToken}` },
+  //     });
 
+  //     const response = await instance.get(
+  //       `${baseUrl}/villas`
+  //     );
+  //     setData(response.data.result);
+  //   } catch (error) {
+  //     console.log("response error", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleGetItem();
+  // }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Location</Text>

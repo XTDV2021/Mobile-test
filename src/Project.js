@@ -12,11 +12,11 @@ const ProjectScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [data, setData] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
-
+ 
     const inputRef = useRef(null);
 
     const handleRestaurantPress = () => {
-        navigation.navigate('product');
+        navigation.navigate('product',{datas: data});
     };
 
     const handleGetItem = async () => {
@@ -77,7 +77,7 @@ const ProjectScreen = () => {
                 </TouchableOpacity>
                 <TextInput
                     ref={inputRef}
-                    placeholder="Search 'VietNam, Asia'"
+                    placeholder="Search Here"
                     placeholderTextColor="rgb(44, 44, 44)"
                     style={styles.input}
                     value={searchText}

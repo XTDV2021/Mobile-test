@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image, Modal, } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { baseUrl } from "./utils/IP";
@@ -19,14 +19,17 @@ const ProductListingScreen = () => {
 
   const handleGetItem = async () => {
     try {
+      // const route = useRoute();
+      // const dataProjects = route.params?.data || []
       const accessToken = await AsyncStorage.getItem("accessToken");
       const instance = axios.create({
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
       const response = await instance.get(
-        `${baseUrl}/subdivisions`
+        `${baseUrl}/subdivisions`,
       );
+      // console.log('data ne project: ', dataProjects);
       setData(response.data.result);
     } catch (error) {
       console.log("response error", error);
@@ -79,7 +82,7 @@ const ProductListingScreen = () => {
         </TouchableOpacity>
         <TextInput
           ref={inputRef}
-          placeholder="Search 'VietNam, Asia'"
+          placeholder="Search Here"
           placeholderTextColor="rgb(44, 44, 44)"
           style={styles.input}
           value={searchText}

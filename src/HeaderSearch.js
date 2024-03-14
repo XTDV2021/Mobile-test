@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import Sidebar from './sidebar'; 
+// import Sidebar from './sidebar'; 
 
 const CustomInput = ({ icon, ...rest }) => (
     <View style={styles.inputContainer}>
@@ -23,7 +23,7 @@ const SearchHeader = () => {
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={handleLogoPress}>
-                <Image source={require('../assets/favicon copy.png')} style={styles.logo} />
+                {/* <Image source={require('../assets/favicon copy.png')} style={styles.logo} /> */}
             </TouchableOpacity>
             <CustomInput
                 placeholder="Search 'VietNam, Asia'"

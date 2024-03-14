@@ -15,7 +15,8 @@ const ProductScreen = () => {
 
   const inputRef = useRef(null);
 
-  const handleRestaurantPress = () => {
+  const handleRestaurantPress = (villaId) => {
+    // saveItemToStorage(villaId)
     navigation.navigate('Order');
   };
 
@@ -41,8 +42,7 @@ const ProductScreen = () => {
 
   const handleSearch = () => {
     const filteredData = data.filter(item =>
-      item.address.toLowerCase().includes(searchText.toLowerCase())
-      || item.villa_name.toLowerCase().includes(searchText.toLowerCase())
+       item.villa_name.toLowerCase().includes(searchText.toLowerCase())
     );
     setData(filteredData);
   };
@@ -78,7 +78,7 @@ const ProductScreen = () => {
         </TouchableOpacity>
         <TextInput
           ref={inputRef}
-          placeholder="Search 'VietNam, Asia'"
+          placeholder="Search Here"
           placeholderTextColor="rgb(44, 44, 44)"
           style={styles.input}
           value={searchText}
@@ -113,7 +113,7 @@ const ProductScreen = () => {
           <FlatList
             data={data}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={handleRestaurantPress}>
+              <TouchableOpacity onPress={() => handleRestaurantPress(item._id)}>
                 <View style={styles.container1} >
                   <View style={styles.cardContainer}>
                     <Image source={require('../assets/9.jpg')} style={styles.imageStyle} />

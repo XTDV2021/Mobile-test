@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { View, ScrollView, Text, Animated, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { BANNER_H } from './constants';
-import TopNavigation from './TopNavigation';
+// import TopNavigation from './TopNavigation';
 import DummyText from './Dummytext';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchHeader from '../HeaderSearch';
 import AmenitiesScreen from '../Item';
 import Address from './address';

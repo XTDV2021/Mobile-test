@@ -45,7 +45,13 @@ const HomeScreen = () => {
       console.log("response error", error);
     }
   };
+  const result = handleGetStore();
+  const dataResult = result.then((value) => {
+    // console.log(value); 
+    return value;
+  })
 
+  const [data, SetData] = useState(dataResult);
   useEffect(() => {
     let interval = setInterval(() => {
       if (activeIndex === carouselData.length - 1) {
@@ -85,13 +91,7 @@ const HomeScreen = () => {
     },
   ];
 
-  const result = handleGetStore();
-  const dataResult = result.then((value) => {
-    // console.log(value); 
-    return value;
-  })
 
-  const [data, SetData] = useState(dataResult);
 
   const handlePress = () => {
     navigation.navigate('product');

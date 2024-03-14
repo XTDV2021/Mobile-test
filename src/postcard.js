@@ -61,7 +61,7 @@ const PostScreen = () => {
             <View style={styles.header}>
                 <TextInput
                     ref={inputRef}
-                    placeholder="Search 'VietNam, Asia'"
+                    placeholder="Search Here"
                     placeholderTextColor="rgb(44, 44, 44)"
                     style={styles.input}
                     value={searchText}

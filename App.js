@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/login";
 import HomeScreen from "./src/home";
-
 import ProfileScreen from "./src/profile";
 import SubdivisionScreen from "./src/subdivision/orderScreen";
 import Location from "./src/Location";

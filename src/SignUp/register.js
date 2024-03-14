@@ -44,10 +44,6 @@ const RegisterScreen = ({ navigation }) => {
                 }
             );
             console.log("response data", response.data);
-            // .accessToken
-            // await AsyncStorage.setItem("accessToken", response.data.accessToken);
-            // localStorage.setItem("accessToken", accessToken);
-            // axios.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
             navigation.navigate("Login");
             // handleGetStore();
         } catch (error) {
@@ -66,7 +62,7 @@ const RegisterScreen = ({ navigation }) => {
                     style={styles.logo}
                 />
             </View>
-            <Text style={styles.title}>Welcome To TripFinder</Text>
+            <Text style={styles.title}>Welcome To The Oasis Luxury</Text>
             <Text style={styles.label}>Please Register for your account</Text>
 
 

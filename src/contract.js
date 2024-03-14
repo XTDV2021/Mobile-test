@@ -1,22 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { baseUrl } from "./utils/IP";
+
 
 const ContractScreen = () => {
     const [dateNow, setDateNow] = useState('');
     const navigation = useNavigation();
+    const [name, setName] = useState('');
+    const [dateReceive, setDateReceive] = useState('');
+    const [where, setWhere] = useState('');
+    const [taxCode, setTaxCode] = useState('');
     const [input1, setInput1] = useState('Hoàng');
     const [input2, setInput2] = useState('Trần Huy Hoàng');
     const [input3, setInput3] = useState('');
     const [input4, setInput4] = useState('');
 
-    const Confirm = () => {
-        if (input3.trim() !== '' && input4.trim() !== '') {
-            navigation.navigate('BookSuccess');
-        } else {
-            Alert.alert('Thông báo', 'Bạn chưa điền đủ thông tin. Vui lòng nhập ký và họ tên.');
+
+    const handleGetStore = async () => {
+        try {
+            const accessToken = await AsyncStorage.getItem("accessToken");
+            const user_Id = await AsyncStorage.getItem("user_id");
+            const instance = axios.create({
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+            const response = await instance.get(
+                `${baseUrl}/users/${user_Id}`
+            );
+            // 
+            SetData(response.data.user);
+        } catch (error) {
+            console.log("response error", error);
         }
     };
+    const result = handleGetStore();
+    const dataResult = result.then((value) => {
+        // console.log("gia tri data: ",value); 
+        return value;
+    })
+    const [data, SetData] = useState(dataResult);
+
+
+    const Confirm = () => {
+        if (input3.trim() !== '' && input4.trim() !== '' && dateReceive.trim() !== '' && name.trim() !== '' && where.trim() !== '' && taxCode.trim() !== '') {
+            navigation.navigate('BookSuccess');
+        } else {
+            Alert.alert('Thông báo', 'Bạn chưa điền đủ thông tin hay sai form');
+        }
+    };
+    
     useEffect(() => {
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('vi-VN');
@@ -47,10 +82,10 @@ const ContractScreen = () => {
                 <Text style={styles.textLabel}>
                     - Căn cứ nhu cầu và khả năng của các bên
                 </Text>
-                <Text style={{fontSize: 14,marginLeft: 5, marginTop: 20 }}>
+                <Text style={{ fontSize: 14, marginLeft: 5, marginTop: 20 }}>
                     Hôm nay, {dateNow}, chúng tôi bao gồm:
                 </Text>
-                <Text style={{ fontWeight: 'bold',fontSize: 15,marginLeft: 5, marginTop: 5 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15, marginLeft: 5, marginTop: 5 }}>
                     Bên A (bên bán):
                 </Text>
                 <Text style={styles.textLabel}>
@@ -72,7 +107,7 @@ const ContractScreen = () => {
                     Người đại diện theo pháp luật:
                 </Text>
                 <Text style={styles.textLabel}>
-                    Ông/Bà: Nguyễn Văn Anh
+                    Ông/Bà: Nguyễn Văn A
                 </Text>
                 <Text style={styles.textLabel}>
                     Chức vụ: CEO
@@ -89,34 +124,57 @@ const ContractScreen = () => {
                 <Text style={styles.textLabel}>
                     Nơi cấp: TP. Hồ Chí Minh
                 </Text>
-                <Text style={{ fontWeight: 'bold',fontSize: 15,marginLeft: 5 , marginTop:5}}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15, marginLeft: 5, marginTop: 5 }}>
                     Bên B (bên mua):
                 </Text>
                 <Text style={styles.textLabel}>
                     Người đại diện theo pháp luật:
                 </Text>
+                <Text style={styles.textLabel}>Họ và Tên:{`${data.full_name} `}</Text>
                 <Text style={styles.textLabel}>
-                    (1) Ông/Bà:
+                    Số điện thoại liên hệ:{`${data.phone_number} `}
                 </Text>
-                <Text style={styles.textLabel}>
-                    Số điện thoại liên hệ:
-                </Text>
-                <Text style={styles.textLabel}>
-                    (2) Mã số thuế:
-                </Text>
-                <Text style={styles.textLabel}>
-                    (3) Số CCCD:
-                </Text>
-                <Text style={styles.textLabel}>
-                    (4)Ngày cấp:
-                </Text>
-                <Text style={styles.textLabel}>
-                    nơi cấp:
-                </Text>
-                <Text style={{fontSize: 14,marginLeft: 5, marginTop: 20 }}>
+
+                <View style={styles.container1}>
+                    <Text style={styles.textLabel}>số CCCD:</Text>
+                    <TextInput
+                        style={styles.textInput1}
+                        placeholder="Nhập số CCCD của bạn"
+                        value={dateReceive}
+                        onChangeText={setDateReceive}
+                    />
+                </View>
+                <View style={styles.container1}>
+                    <Text style={styles.textLabel}>Ngày cấp:</Text>
+                    <TextInput
+                        style={styles.textInput1}
+                        placeholder="Nhập ngày cấp CCCD "
+                        value={name}
+                        onChangeText={setName}
+                    />
+                </View>
+                <View style={styles.container1}>
+                    <Text style={styles.textLabel}>Nơi cấp:</Text>
+                    <TextInput
+                        style={styles.textInput1}
+                        placeholder="Nhập nơi cấp CCCD"
+                        value={where}
+                        onChangeText={setWhere}
+                    />
+                </View>
+                <View style={styles.container1}>
+                    <Text style={styles.textLabel}>Mã số thuế:</Text>
+                    <TextInput
+                        style={styles.textInput1}
+                        placeholder="Nhập mã số thuế"
+                        value={taxCode}
+                        onChangeText={setTaxCode}
+                    />
+                </View>
+                <Text style={{ fontSize: 14, marginLeft: 5, marginTop: 20 }}>
                     Cùng bàn bạc thống nhất những thỏa thuận sau đây:
                 </Text>
-                <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#26AAA0',marginTop: 5  }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#26AAA0', marginTop: 5 }}>
                     Điều 1. Đối tượng hợp đồng
                 </Text>
                 <Text style={styles.textLabel}>
@@ -124,19 +182,12 @@ const ContractScreen = () => {
                 </Text>
                 <Text style={styles.textLabel}>
                     <Text style={styles.text}>Tên Villa:</Text> {'\n'}
-                    {/* <Text style={styles.textValue}>{villa_name}</Text> */}
                     <Text style={styles.text}>Må Villa:</Text>{'\n'}
-                    {/* <Text style={styles.textValue}>{villa_id}</Text> */}
                     <Text style={styles.text}>Địa chỉ villa:</Text> {'\n'}
-                    {/* <Text style={styles.textValue}>{address}</Text> */}
                     <Text style={styles.text}>Thời gian bắt đầu:</Text>{'\n'}
-                    {/* <Text style={styles.textValue}>{start_date}</Text> */}
                     <Text style={styles.text}>Thời gian kết thúc:</Text>{'\n'}
-                    {/* <Text style={styles.textValue}>{end_date}</Text> */}
                     <Text style={styles.text}>Tổng số tuần:</Text> {'\n'}
-                    {/* <Text style={styles.textValue}>{total_week}</Text> */}
                     <Text style={styles.text}>Tiện ích:</Text>
-                    {/* <Text style={styles.textValue}>{utilities}</Text> */}
                 </Text>
                 <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#26AAA0', marginTop: 5 }}>
                     Điều 2. Gía bán và phương thức thanh toán
@@ -322,18 +373,40 @@ const styles = StyleSheet.create({
         textAlign: 'center',
 
     },
+    container1: {
+        flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+    },
+    //   textLabel: {
+    //     fontSize: 16,
+    //     fontWeight: 'bold',
+    //     marginBottom: 10,
+    //   },
+    textInput1: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 5,
+        padding: 10,
+        width: '80%',
+        fontSize: 16,
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 10,
+        width: 370,
+    },
     saveButton: {
         backgroundColor: '#26AAA0',
         padding: 10,
         borderRadius: 5,
-        alignItems:'center',
+        alignItems: 'center',
         marginTop: 50,
         width: 150,
         marginLeft: 120,
-      },
-      saveButtonText: {
+    },
+    saveButtonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-      },
+    },
 });
